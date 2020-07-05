@@ -74,17 +74,25 @@ while running:
                 snakeHeadChangey = snakeHeadChangeAmount
 
     # Checking the bounds for the snake head
-    if screenx - snakeHeadWidth >= snakeSegmentX[0] + snakeHeadChangex >= 0:
-        if screeny - snakeHeadWidth >= snakeSegmentY[0] + snakeHeadChangey >= 0:
-            for i in range(snakeLength - 1, 0, -1):
-                snakeSegmentX[i] = snakeSegmentX[i - 1]
-                snakeSegmentY[i] = snakeSegmentY[i - 1]
+    if screenx - snakeHeadWidth >= snakeSegmentX[0] + snakeHeadChangex >= 0 and screeny - snakeHeadWidth >= snakeSegmentY[0] + snakeHeadChangey >= 0:
+        for i in range(snakeLength - 1, 0, -1):
+            snakeSegmentX[i] = snakeSegmentX[i - 1]
+            snakeSegmentY[i] = snakeSegmentY[i - 1]
 
-            snakeSegmentX[0] += snakeHeadChangex
-            snakeSegmentY[0] += snakeHeadChangey
+        snakeSegmentX[0] += snakeHeadChangex
+        snakeSegmentY[0] += snakeHeadChangey
+
+    # If the snake head is out of bounds of the map end game
+    else:
+        running = False
+
 
     for i in range(snakeLength):
         snake(snakeSegmentX[i], snakeSegmentY[i])
+
+        for j in range(snakeLength):
+            if i != j and snakeSegmentX[i] == snakeSegmentX[j] and snakeSegmentY[i] == snakeSegmentY[j]:
+                running = False
 
     # Check if the snake head touches the circle
     if snakeSegmentX[0] == snakeGrowx and snakeSegmentY[0] == snakeGrowy:
