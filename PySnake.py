@@ -2,108 +2,122 @@ import pygame
 import time
 import random
 
-# initialize pygame
-pygame.init()
-
-# create the screen with height and width
-
-screenx = 800
-screeny = 600
-snakeHeadWidth = 50
-screen = pygame.display.set_mode((screenx, screeny))
-
-pygame.display.set_caption("Snake")
-
-snakeSegments = pygame.image.load("WhiteSquare48x48.png")
-snakeHeadChangeAmount = 50
-snakeHeadChangex = snakeHeadChangeAmount
-snakeHeadChangey = 0
-
-snakeLength = 1
-
-snakeSegmentX = []
-snakeSegmentY = []
-
-snakeSegmentX.append(round((screenx - snakeHeadWidth) / snakeHeadWidth / 2) * snakeHeadWidth)
-snakeSegmentY.append(round((screeny - snakeHeadWidth) / snakeHeadWidth / 2) * snakeHeadWidth)
-
-snakeGrow = pygame.image.load("WhiteCircle50x50.png")
-snakeGrowx = round(random.randint(0, screenx - snakeHeadWidth) / snakeHeadWidth) * snakeHeadWidth
-snakeGrowy = round(random.randint(0, screeny - snakeHeadWidth) / snakeHeadWidth) * snakeHeadWidth
-
-
-def snake(x, y):
+def snake(screen, snakeSegments, x, y):
     screen.blit(snakeSegments, (x, y))
 
 
-def circle(x, y):
+def circle(screen, snakeGrow, x, y):
     screen.blit(snakeGrow, (x, y))
 
 
 # Game Loop
-running = True
+def snakeGame(screenx, screeny):
+    snakeHeadWidth = 50
 
-while running:
+    screen = pygame.display.set_mode((screenx, screeny))
 
-    screen.fill((0, 0, 0))
+    pygame.display.set_caption("Snake")
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    snakeSegments = pygame.image.load("WhiteSquare48x48.png")
+    snakeHeadChangeAmount = 50
+    snakeHeadChangex = snakeHeadChangeAmount
+    snakeHeadChangey = 0
 
-        # If Keystroke check right or left
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT and snakeHeadChangey != 0:
-                print("Left")
-                snakeHeadChangex = -snakeHeadChangeAmount
-                snakeHeadChangey = 0
+    snakeLength = 1
 
-            elif event.key == pygame.K_RIGHT and snakeHeadChangey != 0:
-                print("Right")
-                snakeHeadChangex = snakeHeadChangeAmount
-                snakeHeadChangey = 0
+    snakeSegmentX = []
+    snakeSegmentY = []
 
-            elif event.key == pygame.K_UP and snakeHeadChangex != 0:
-                print("Up")
-                snakeHeadChangex = 0
-                snakeHeadChangey = -snakeHeadChangeAmount
+    snakeSegmentX.append(round((screenx - snakeHeadWidth) / snakeHeadWidth / 2) * snakeHeadWidth)
+    snakeSegmentY.append(round((screeny - snakeHeadWidth) / snakeHeadWidth / 2) * snakeHeadWidth)
 
-            elif event.key == pygame.K_DOWN and snakeHeadChangex != 0:
-                print("Down")
-                snakeHeadChangex = 0
-                snakeHeadChangey = snakeHeadChangeAmount
+    snakeGrow = pygame.image.load("WhiteCircle50x50.png")
+    snakeGrowx = round(random.randint(0, screenx - snakeHeadWidth) / snakeHeadWidth) * snakeHeadWidth
+    snakeGrowy = round(random.randint(0, screeny - snakeHeadWidth) / snakeHeadWidth) * snakeHeadWidth
 
-    # Checking the bounds for the snake head
-    if screenx - snakeHeadWidth >= snakeSegmentX[0] + snakeHeadChangex >= 0 and screeny - snakeHeadWidth >= snakeSegmentY[0] + snakeHeadChangey >= 0:
-        for i in range(snakeLength - 1, 0, -1):
-            snakeSegmentX[i] = snakeSegmentX[i - 1]
-            snakeSegmentY[i] = snakeSegmentY[i - 1]
+    running = True
+    while running:
+        screen.fill((0, 0, 0))
 
-        snakeSegmentX[0] += snakeHeadChangex
-        snakeSegmentY[0] += snakeHeadChangey
-
-    # If the snake head is out of bounds of the map end game
-    else:
-        running = False
-
-
-    for i in range(snakeLength):
-        snake(snakeSegmentX[i], snakeSegmentY[i])
-
-        for j in range(snakeLength):
-            if i != j and snakeSegmentX[i] == snakeSegmentX[j] and snakeSegmentY[i] == snakeSegmentY[j]:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 running = False
 
-    # Check if the snake head touches the circle
-    if snakeSegmentX[0] == snakeGrowx and snakeSegmentY[0] == snakeGrowy:
-        snakeLength += 1
-        snakeGrowx = round(random.randint(0, screenx - snakeHeadWidth) / snakeHeadWidth) * snakeHeadWidth
-        snakeGrowy = round(random.randint(0, screeny - snakeHeadWidth) / snakeHeadWidth) * snakeHeadWidth
-        snakeSegmentX.append(snakeSegmentX[snakeLength - 2] - snakeHeadChangex)
-        snakeSegmentY.append(snakeSegmentY[snakeLength - 2] - snakeHeadChangey)
+            # If Keystroke check right or left
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT and snakeHeadChangey != 0:
+                    print("Left")
+                    snakeHeadChangex = -snakeHeadChangeAmount
+                    snakeHeadChangey = 0
 
-    circle(snakeGrowx, snakeGrowy)
+                elif event.key == pygame.K_RIGHT and snakeHeadChangey != 0:
+                    print("Right")
+                    snakeHeadChangex = snakeHeadChangeAmount
+                    snakeHeadChangey = 0
 
-    pygame.display.update()
+                elif event.key == pygame.K_UP and snakeHeadChangex != 0:
+                    print("Up")
+                    snakeHeadChangex = 0
+                    snakeHeadChangey = -snakeHeadChangeAmount
 
-    time.sleep(0.5)
+                elif event.key == pygame.K_DOWN and snakeHeadChangex != 0:
+                    print("Down")
+                    snakeHeadChangex = 0
+                    snakeHeadChangey = snakeHeadChangeAmount
+
+        # Checking the bounds for the snake head
+        if screenx - snakeHeadWidth >= snakeSegmentX[0] + snakeHeadChangex >= 0 and screeny - snakeHeadWidth >= \
+                snakeSegmentY[0] + snakeHeadChangey >= 0:
+            for i in range(snakeLength - 1, 0, -1):
+                snakeSegmentX[i] = snakeSegmentX[i - 1]
+                snakeSegmentY[i] = snakeSegmentY[i - 1]
+
+            snakeSegmentX[0] += snakeHeadChangex
+            snakeSegmentY[0] += snakeHeadChangey
+
+        # If the snake head is out of bounds of the map end game
+        else:
+            running = False
+
+        for i in range(snakeLength):
+            snake(screen, snakeSegments, snakeSegmentX[i], snakeSegmentY[i])
+
+            for j in range(snakeLength):
+                if i != j and snakeSegmentX[i] == snakeSegmentX[j] and snakeSegmentY[i] == snakeSegmentY[j]:
+                    running = False
+
+        # Check if the snake head touches the circle
+        if snakeSegmentX[0] == snakeGrowx and snakeSegmentY[0] == snakeGrowy:
+            snakeLength += 1
+            snakeGrowx = round(random.randint(0, screenx - snakeHeadWidth) / snakeHeadWidth) * snakeHeadWidth
+            snakeGrowy = round(random.randint(0, screeny - snakeHeadWidth) / snakeHeadWidth) * snakeHeadWidth
+            snakeSegmentX.append(snakeSegmentX[snakeLength - 2] - snakeHeadChangex)
+            snakeSegmentY.append(snakeSegmentY[snakeLength - 2] - snakeHeadChangey)
+
+        circle(screen, snakeGrow, snakeGrowx, snakeGrowy)
+
+        pygame.display.update()
+
+        time.sleep(0.5)
+
+
+def gameOver(screenx, screeny):
+    screen = pygame.display.set_mode((screenx, screeny))
+    font = pygame.font.Font('freesansbold.ttf', 64)
+    gameOverText = font.render("GAME OVER", True, (255, 255, 255))
+    screen.blit(gameOverText, (screenx/2 - 200, screeny/2 - 60))
+
+    while True:
+        pygame.display.update()
+
+# Initialize pygame
+pygame.init()
+
+screenx = 800
+screeny = 600
+
+# Main Loop
+snakeGame(screenx, screeny)
+
+# Game Over Screen
+gameOver(screenx, screeny)
