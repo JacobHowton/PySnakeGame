@@ -2,12 +2,51 @@ import pygame
 import time
 import random
 
+
 def snake(screen, snakeSegments, x, y):
     screen.blit(snakeSegments, (x, y))
 
 
 def circle(screen, snakeGrow, x, y):
     screen.blit(snakeGrow, (x, y))
+
+
+# Main Menu
+def startMenu(screenx, screeny):
+    screen = pygame.display.set_mode((screenx, screeny))
+    font = pygame.font.Font('freesansbold.ttf', 64)
+
+    WHITE = (255, 255, 255)
+    GRAY = (128, 128, 128)
+
+    color = WHITE
+    buttonBackColor = GRAY
+    gameOverText = font.render("Start Game", True, (color))
+
+    # buttonBack = pygame.draw.rect(screen, buttonBackColor, (screenx/2 - 210, screeny/2 - 65, 375, 75))
+    buttonBack = pygame.Rect(screenx / 2 - 210, screeny / 2 - 65, 375, 75)
+    screen.blit(gameOverText, (screenx / 2 - 200, screeny / 2 - 60))
+
+    running = True
+    while running:
+
+        for event in pygame.event.get():
+
+            pos = pygame.mouse.get_pos()
+
+            if buttonBack.collidepoint(pos):
+                color = GRAY
+                gameOverText = font.render("Start Game", True, (color))
+
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    running = False
+
+            else:
+                color = WHITE
+                gameOverText = font.render("Start Game", True, (color))
+
+        screen.blit(gameOverText, (screenx / 2 - 200, screeny / 2 - 60))
+        pygame.display.update()
 
 
 # Game Loop
@@ -99,16 +138,18 @@ def snakeGame(screenx, screeny):
         pygame.display.update()
 
         time.sleep(0.5)
+    gameOver(screenx, screeny)
 
-
+# Game over screen
 def gameOver(screenx, screeny):
     screen = pygame.display.set_mode((screenx, screeny))
     font = pygame.font.Font('freesansbold.ttf', 64)
     gameOverText = font.render("GAME OVER", True, (255, 255, 255))
-    screen.blit(gameOverText, (screenx/2 - 200, screeny/2 - 60))
+    screen.blit(gameOverText, (screenx / 2 - 200, screeny / 2 - 60))
 
     while True:
         pygame.display.update()
+
 
 # Initialize pygame
 pygame.init()
@@ -116,8 +157,9 @@ pygame.init()
 screenx = 800
 screeny = 600
 
+# Start Menu
+startMenu(screenx, screeny)
+
 # Main Loop
 snakeGame(screenx, screeny)
 
-# Game Over Screen
-gameOver(screenx, screeny)
