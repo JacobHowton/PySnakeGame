@@ -74,6 +74,9 @@ def snakeGame(screenx, screeny):
     snakeGrowx = round(random.randint(0, screenx - snakeHeadWidth) / snakeHeadWidth) * snakeHeadWidth
     snakeGrowy = round(random.randint(0, screeny - snakeHeadWidth) / snakeHeadWidth) * snakeHeadWidth
 
+    font = pygame.font.Font('freesansbold.ttf', 16)
+    score = 0
+
     running = True
     while running:
         screen.fill((0, 0, 0))
@@ -132,8 +135,13 @@ def snakeGame(screenx, screeny):
             snakeGrowy = round(random.randint(0, screeny - snakeHeadWidth) / snakeHeadWidth) * snakeHeadWidth
             snakeSegmentX.append(snakeSegmentX[snakeLength - 2] - snakeHeadChangex)
             snakeSegmentY.append(snakeSegmentY[snakeLength - 2] - snakeHeadChangey)
+            score += 1
 
         circle(screen, snakeGrow, snakeGrowx, snakeGrowy)
+
+        scoreText = font.render("SCORE: " + str(score), True, (255, 255, 255))
+
+        screen.blit(scoreText, (0, 0))
 
         pygame.display.update()
 
