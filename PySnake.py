@@ -140,14 +140,62 @@ def snakeGame(screenx, screeny):
         time.sleep(0.5)
     gameOver(screenx, screeny)
 
+
 # Game over screen
 def gameOver(screenx, screeny):
+    WHITE = (255, 255, 255)
+    GRAY = (128, 128, 128)
+
     screen = pygame.display.set_mode((screenx, screeny))
     font = pygame.font.Font('freesansbold.ttf', 64)
-    gameOverText = font.render("GAME OVER", True, (255, 255, 255))
-    screen.blit(gameOverText, (screenx / 2 - 200, screeny / 2 - 60))
+    buttonFont = pygame.font.Font('freesansbold.ttf', 32)
 
-    while True:
+    gameOverText = font.render("GAME OVER", True, (255, 255, 255))
+
+    retryButtonColor = WHITE
+    quitButtonColor = WHITE
+
+    retryButtonText = buttonFont.render("RETRY", True, retryButtonColor)
+    quitButtonText = buttonFont.render("QUIT", True, retryButtonColor)
+
+    retryButtonBack = pygame.Rect(screenx / 2 - 50, screeny / 2, 110, 30)
+    quitButtonBack = pygame.Rect(screenx / 2 - 40, screeny / 2 + 40, 80, 30)
+
+    screen.blit(gameOverText, (screenx / 2 - 200, screeny / 2 - 150))
+
+    running = True
+    while running:
+
+        for event in pygame.event.get():
+
+            pos = pygame.mouse.get_pos()
+
+            if retryButtonBack.collidepoint(pos):
+                retryButtonColor = GRAY
+                retryButtonText = buttonFont.render("RETRY", True, retryButtonColor)
+
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    snakeGame(screenx, screeny)
+
+            else:
+                retryButtonColor = WHITE
+                retryButtonText = buttonFont.render("RETRY", True, retryButtonColor)
+
+            if quitButtonBack.collidepoint(pos):
+                quitButtonColor = GRAY
+                quitButtonText = buttonFont.render("QUIT", True, quitButtonColor)
+
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    pygame.display.quit()
+                    pygame.quit()
+                    exit()
+
+            else:
+                quitButtonColor = WHITE
+                quitButtonText = buttonFont.render("QUIT", True, quitButtonColor)
+
+        screen.blit(retryButtonText, (screenx / 2 - 50, screeny / 2))
+        screen.blit(quitButtonText, (screenx / 2 - 40, screeny / 2 + 40))
         pygame.display.update()
 
 
@@ -162,4 +210,3 @@ startMenu(screenx, screeny)
 
 # Main Loop
 snakeGame(screenx, screeny)
-
