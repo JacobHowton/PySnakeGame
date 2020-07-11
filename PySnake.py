@@ -79,6 +79,9 @@ def snakeGame(screenx, screeny, totalScores):
 
     running = True
     while running:
+
+        time.sleep(0.5)
+
         screen.fill((0, 0, 0))
 
         for event in pygame.event.get():
@@ -145,7 +148,6 @@ def snakeGame(screenx, screeny, totalScores):
 
         pygame.display.update()
 
-        time.sleep(0.5)
 
     totalScores.append(score)
     gameOver(screenx, screeny, totalScores)
@@ -173,8 +175,6 @@ def gameOver(screenx, screeny, totalScores):
 
     scoreText = buttonFont.render("SCORE: " + str(totalScores[len(totalScores) - 1]), True, (255, 255, 255))
     scoreTextHighest = buttonFont.render("HIGH SCORE: " + str(max(totalScores)), True, (255, 255, 255))
-
-
 
     screen.blit(gameOverText, (screenx / 2 - 200, screeny / 2 - 150))
     screen.blit(scoreText, (0, 0))
