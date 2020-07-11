@@ -12,7 +12,7 @@ def circle(screen, snakeGrow, x, y):
 
 
 # Main Menu
-def startMenu(screenx, screeny):
+def startMenu(screenx, screeny, totalScores):
     screen = pygame.display.set_mode((screenx, screeny))
     font = pygame.font.Font('freesansbold.ttf', 64)
 
@@ -50,7 +50,7 @@ def startMenu(screenx, screeny):
 
 
 # Game Loop
-def snakeGame(screenx, screeny):
+def snakeGame(screenx, screeny, totalScores):
     snakeHeadWidth = 50
 
     screen = pygame.display.set_mode((screenx, screeny))
@@ -146,11 +146,13 @@ def snakeGame(screenx, screeny):
         pygame.display.update()
 
         time.sleep(0.5)
-    gameOver(screenx, screeny)
+
+    totalScores.append(score)
+    gameOver(screenx, screeny, totalScores)
 
 
 # Game over screen
-def gameOver(screenx, screeny):
+def gameOver(screenx, screeny, totalScores):
     WHITE = (255, 255, 255)
     GRAY = (128, 128, 128)
 
@@ -169,7 +171,14 @@ def gameOver(screenx, screeny):
     retryButtonBack = pygame.Rect(screenx / 2 - 50, screeny / 2, 110, 30)
     quitButtonBack = pygame.Rect(screenx / 2 - 40, screeny / 2 + 40, 80, 30)
 
+    scoreText = buttonFont.render("SCORE: " + str(totalScores[len(totalScores) - 1]), True, (255, 255, 255))
+    scoreTextHighest = buttonFont.render("HIGH SCORE: " + str(max(totalScores)), True, (255, 255, 255))
+
+
+
     screen.blit(gameOverText, (screenx / 2 - 200, screeny / 2 - 150))
+    screen.blit(scoreText, (0, 0))
+    screen.blit(scoreTextHighest, (0, 25))
 
     running = True
     while running:
@@ -183,7 +192,7 @@ def gameOver(screenx, screeny):
                 retryButtonText = buttonFont.render("RETRY", True, retryButtonColor)
 
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    snakeGame(screenx, screeny)
+                    snakeGame(screenx, screeny, totalScores)
 
             else:
                 retryButtonColor = WHITE
@@ -213,8 +222,10 @@ pygame.init()
 screenx = 800
 screeny = 600
 
+totalScores = []
+
 # Start Menu
-startMenu(screenx, screeny)
+startMenu(screenx, screeny, totalScores)
 
 # Main Loop
-snakeGame(screenx, screeny)
+snakeGame(screenx, screeny, totalScores)
