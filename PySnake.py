@@ -91,28 +91,33 @@ def snakeGame(screenx, screeny, totalScores):
         # Fill the screen black
         screen.fill((0, 0, 0))
 
+        hasMoved = False
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-            # If Keystroke check for directional change
+            # If Keystroke check for directional change but not more than one direction change per timetick
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT and snakeHeadChangey != 0:
+                if event.key == pygame.K_LEFT and snakeHeadChangey != 0 and hasMoved is False:
+                    hasMoved = True
                     print("Left")
                     snakeHeadChangex = -snakeHeadChangeAmount
                     snakeHeadChangey = 0
 
-                elif event.key == pygame.K_RIGHT and snakeHeadChangey != 0:
+                elif event.key == pygame.K_RIGHT and snakeHeadChangey != 0 and hasMoved is False:
+                    hasMoved = True
                     print("Right")
                     snakeHeadChangex = snakeHeadChangeAmount
                     snakeHeadChangey = 0
 
-                elif event.key == pygame.K_UP and snakeHeadChangex != 0:
+                elif event.key == pygame.K_UP and snakeHeadChangex != 0 and hasMoved is False:
+                    hasMoved = True
                     print("Up")
                     snakeHeadChangex = 0
                     snakeHeadChangey = -snakeHeadChangeAmount
 
-                elif event.key == pygame.K_DOWN and snakeHeadChangex != 0:
+                elif event.key == pygame.K_DOWN and snakeHeadChangex != 0 and hasMoved is False:
                     print("Down")
                     snakeHeadChangex = 0
                     snakeHeadChangey = snakeHeadChangeAmount
