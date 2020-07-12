@@ -20,38 +20,42 @@ def startMenu(screenx, screeny, totalScores):
     GRAY = (128, 128, 128)
 
     color = WHITE
-    buttonBackColor = GRAY
-    gameOverText = font.render("Start Game", True, (color))
+    startGameText = font.render("Start Game", True, (color))
 
-    # buttonBack = pygame.draw.rect(screen, buttonBackColor, (screenx/2 - 210, screeny/2 - 65, 375, 75))
     buttonBack = pygame.Rect(screenx / 2 - 210, screeny / 2 - 65, 375, 75)
-    screen.blit(gameOverText, (screenx / 2 - 200, screeny / 2 - 60))
+    screen.blit(startGameText, (screenx / 2 - 200, screeny / 2 - 60))
 
     running = True
     while running:
 
         for event in pygame.event.get():
 
+            # Store the position of the mouse for checking collisions
             pos = pygame.mouse.get_pos()
 
+            # If the button is hovered, change the color of the text
             if buttonBack.collidepoint(pos):
                 color = GRAY
-                gameOverText = font.render("Start Game", True, (color))
+                startGameText = font.render("Start Game", True, (color))
 
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     running = False
 
             else:
                 color = WHITE
-                gameOverText = font.render("Start Game", True, (color))
+                startGameText = font.render("Start Game", True, (color))
 
-        screen.blit(gameOverText, (screenx / 2 - 200, screeny / 2 - 60))
+        screen.blit(startGameText, (screenx / 2 - 200, screeny / 2 - 60))
         pygame.display.update()
 
 
-# Game Loop
+# Main Game Loop
 def snakeGame(screenx, screeny, totalScores):
+    # Width of all the snake parts in a square's edge's pixles
     snakeHeadWidth = 50
+
+    # Time between movements
+    gameTickTime = 0.5
 
     screen = pygame.display.set_mode((screenx, screeny))
 
@@ -64,6 +68,7 @@ def snakeGame(screenx, screeny, totalScores):
 
     snakeLength = 1
 
+    # Arrays of all of the x and y coordinates of each segment
     snakeSegmentX = []
     snakeSegmentY = []
 
@@ -74,21 +79,23 @@ def snakeGame(screenx, screeny, totalScores):
     snakeGrowx = round(random.randint(0, screenx - snakeHeadWidth) / snakeHeadWidth) * snakeHeadWidth
     snakeGrowy = round(random.randint(0, screeny - snakeHeadWidth) / snakeHeadWidth) * snakeHeadWidth
 
-    font = pygame.font.Font('freesansbold.ttf', 16)
+    font = pygame.font.Font('freesansbold.ttf', 32)
+
     score = 0
 
     running = True
     while running:
 
-        time.sleep(0.5)
+        time.sleep(gameTickTime)
 
+        # Fill the screen black
         screen.fill((0, 0, 0))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-            # If Keystroke check right or left
+            # If Keystroke check for directional change
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT and snakeHeadChangey != 0:
                     print("Left")
@@ -110,7 +117,7 @@ def snakeGame(screenx, screeny, totalScores):
                     snakeHeadChangex = 0
                     snakeHeadChangey = snakeHeadChangeAmount
 
-        # Checking the bounds for the snake head
+        # Checking the bounds for the snake head vs the edges of the screen
         if screenx - snakeHeadWidth >= snakeSegmentX[0] + snakeHeadChangex >= 0 and screeny - snakeHeadWidth >= \
                 snakeSegmentY[0] + snakeHeadChangey >= 0:
             for i in range(snakeLength - 1, 0, -1):
@@ -127,11 +134,12 @@ def snakeGame(screenx, screeny, totalScores):
         for i in range(snakeLength):
             snake(screen, snakeSegments, snakeSegmentX[i], snakeSegmentY[i])
 
+            # Check if the snake's head is colliding with any body segments
             for j in range(snakeLength):
                 if i != j and snakeSegmentX[i] == snakeSegmentX[j] and snakeSegmentY[i] == snakeSegmentY[j]:
                     running = False
 
-        # Check if the snake head touches the circle
+        # Check if the snake head touches the 'grow' and if so add another segment and increment score
         if snakeSegmentX[0] == snakeGrowx and snakeSegmentY[0] == snakeGrowy:
             snakeLength += 1
             snakeGrowx = round(random.randint(0, screenx - snakeHeadWidth) / snakeHeadWidth) * snakeHeadWidth
@@ -147,7 +155,6 @@ def snakeGame(screenx, screeny, totalScores):
         screen.blit(scoreText, (0, 0))
 
         pygame.display.update()
-
 
     totalScores.append(score)
     gameOver(screenx, screeny, totalScores)
@@ -168,7 +175,7 @@ def gameOver(screenx, screeny, totalScores):
     quitButtonColor = WHITE
 
     retryButtonText = buttonFont.render("RETRY", True, retryButtonColor)
-    quitButtonText = buttonFont.render("QUIT", True, retryButtonColor)
+    quitButtonText = buttonFont.render("QUIT", True, quitButtonColor)
 
     retryButtonBack = pygame.Rect(screenx / 2 - 50, screeny / 2, 110, 30)
     quitButtonBack = pygame.Rect(screenx / 2 - 40, screeny / 2 + 40, 80, 30)
@@ -219,9 +226,11 @@ def gameOver(screenx, screeny, totalScores):
 # Initialize pygame
 pygame.init()
 
+# X and Y dimmensions of the screen
 screenx = 800
 screeny = 600
 
+# An array to hold the scores
 totalScores = []
 
 # Start Menu
