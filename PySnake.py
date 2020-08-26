@@ -101,24 +101,20 @@ def snakeGame(screenx, screeny, totalScores):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT and snakeHeadChangey != 0 and hasMoved is False:
                     hasMoved = True
-                    print("Left")
                     snakeHeadChangex = -snakeHeadChangeAmount
                     snakeHeadChangey = 0
 
                 elif event.key == pygame.K_RIGHT and snakeHeadChangey != 0 and hasMoved is False:
                     hasMoved = True
-                    print("Right")
                     snakeHeadChangex = snakeHeadChangeAmount
                     snakeHeadChangey = 0
 
                 elif event.key == pygame.K_UP and snakeHeadChangex != 0 and hasMoved is False:
                     hasMoved = True
-                    print("Up")
                     snakeHeadChangex = 0
                     snakeHeadChangey = -snakeHeadChangeAmount
 
                 elif event.key == pygame.K_DOWN and snakeHeadChangex != 0 and hasMoved is False:
-                    print("Down")
                     snakeHeadChangex = 0
                     snakeHeadChangey = snakeHeadChangeAmount
 
